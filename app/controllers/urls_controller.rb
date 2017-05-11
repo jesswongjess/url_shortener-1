@@ -1,15 +1,12 @@
 class UrlsController < ApplicationController
+
     def index
         @urls = Url.all
         @url = Url.new
     end
 
-    def show
-    	@url = Url.find(params[:id])
-	end
-
-	def new
-  		@url = Url.new	
+	def new		
+  	    @url = Url.new(url_params)
 	end
 
 	def create
@@ -17,27 +14,21 @@ class UrlsController < ApplicationController
 	  @url.shorten
 
 	  if @url.save
-	      redirect_to urls_path  
-	  else
-	  	  url_params = nil
+	      redirect_to urls_path
+	  else  
 	  	  @errors = @url.errors.full_messages
 	      render :new
 	  end   
+
 	end
 
 	# def errors
 	# 	@errors = @url.errors.full_messages
 	# end	
 
-	def destroy
-	    @url = Url.find(params[:id])
-	    @url.destroy
-	    redirect_to urls_path
-	end
-
 	private 
 	def url_params
-	    params.require(:url).permit(:long_url)
+	    params.require(:url).permit(:long_url, :short_url)
 	end
 
 end

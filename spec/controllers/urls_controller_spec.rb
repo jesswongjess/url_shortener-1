@@ -17,7 +17,7 @@ RSpec.describe UrlsController, type: :controller do
     context "when valid params" do
       it "should save url" do
         post :create, valid_params
-        expect(Url.find_by(valid_params[:url])).not_to eq nil
+        expect(Url.where(valid_params[:url])).not_to eq nil
       end
 
       it "should redirect to #index" do
