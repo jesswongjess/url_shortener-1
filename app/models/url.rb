@@ -1,16 +1,15 @@
-#require 'uri'
+require 'uri'
 
 class Url < ActiveRecord::Base
 
-  validates :long_url, presence: true, allow_blank: false
-  validates :long_url, uniqueness: true
-  validates :short_url, presence: true, allow_blank: false
+  validates :long_url, presence: true, uniqueness: true, allow_blank: false
+  #validates :long_url, uniqueness: true
+  validates :short_url, presence: true, allow_blank: true
   validate :is_valid_url
-  #validates :long_url, :format => URI::regexp(%w(http https))
+  validates :long_url, :format => URI::regexp(%w(http https))
 
 	before_create do 
 		self.short_url = shorten
-		is_valid_url
 	end
 
     def shorten
@@ -22,7 +21,7 @@ class Url < ActiveRecord::Base
     # 	Url.is_valid_url
     # 	return Url.shorten
     # end	
-
+    private
     def is_valid_url
     #TODO upgrade validations
    		unless !self.long_url.nil? && self.long_url.start_with?("http://", "https://") 

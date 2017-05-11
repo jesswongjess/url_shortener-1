@@ -1,1 +1,26 @@
-<p>index</p>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 left">
+			<h1> <%= link_to "Shorten a Url!", new_url_path %> </h1>
+			<table>
+			<tr>
+			<th>Original URL</th>
+			<th>Shortened URL</th>
+			</tr>
+
+			<%  @urls.each do |url| %>
+			    <tr>
+			    <td> <a href = <%= url.long_url %> ><%= url.long_url %></a></td>
+			    <td> <%= url.short_url %></a> </td>
+			    <td> <%= link_to 'Show', url_path(url) %> </td>
+			    <td><%= link_to 'Delete', url_path(url), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+			    
+			    </tr>   
+			<% end %>
+			</table>
+		</div>
+		<div class="col-md-6 right">
+			<%= render 'form'%>
+		</div>
+	</div>
+</div>
