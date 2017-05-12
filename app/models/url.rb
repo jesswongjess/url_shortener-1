@@ -1,34 +1,26 @@
 class Url < ActiveRecord::Base
 
-  validates_presence_of :long_url, :short_url
-  validate :is_valid_url
-  after_initialize :shorten
-
-	before_create do 
-		self.short_url = shorten
-	end
-
+    validates :long_url, :presence => true
+    validates :short_url, :presence => true
+    validate :is_valid_url
+    
     def shorten
-    # Write a method here
-        return ((0..9).to_a + ("a".."z").to_a + ("A".."Z").to_a).sample(7).join unless nil
+        characters = [*"0".."9", *"A".."Z", *"a".."z"]
+        @short_url = (0..6).map{characters.sample}.join
+        self.short_url = @short_url
     end
 
-    def self.retrieve_short_url(proper_long_url)
-        url = Url.find_by(long_url: long_url)
+    def self.retrieve_short_url(long_url)
+        url = Url.find_by(long_url:long_url)
+        return nil if u.nil?
+        url.short_url
+    end
 
-    	  if url.nil? 
-          return nil
-        else 
-         return url.short_url
-        end 
-    end	
-    
-    private
     def is_valid_url
-    #TODO upgrade validations
-   		unless !self.long_url.nil? && self.long_url.start_with?("http://", "https://") 
-      		errors.add(:long_url, "must start with http:// or https://")
-    	end
-	end
+        return false if long_url.nil?
+          unless self.long_url.starts_with?("http://", "https://")
+            errors.add(:long_url, "invalid format")
+          end
+    end
 
 end

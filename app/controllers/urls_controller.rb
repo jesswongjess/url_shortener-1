@@ -6,11 +6,11 @@ class UrlsController < ApplicationController
     end
 
 	def new		
-  	    @url = Url.new(url_params)
+  	    @url = Url.new
 	end
 
 	def create	
-	  @url = Url.new(url_params) #if @url.valid?
+	  @url = Url.new(long_url: params[:url][:long_url]) #if @url.valid?
 	  @url.shorten
 
 	  if @url.save && @url.valid?
@@ -27,10 +27,10 @@ class UrlsController < ApplicationController
 	    redirect_to url.long_url    
 	end 
 
-	private 
-	def url_params
-        #params = ActionController::Parameters.new(long_url)
-	    params.require(:url).permit(:long_url) if params[:url]
-	end
+	# private 
+	# def url_params
+ #        #params = ActionController::Parameters.new(long_url)
+	#     params.require(:url).permit(:long_url) if params[:url]
+	# end
 
 end
